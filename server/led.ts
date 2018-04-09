@@ -1,5 +1,6 @@
 import * as e131 from "e131"
 import * as _ from "lodash"
+import * as chroma from "chroma-js"
 
 const channelsPerPixel = 3
 const channelsPerUniverse = 510
@@ -109,18 +110,26 @@ const bitmap: Array<Array<[number, number, number]>> = Array(height)
 			.map(() => [0, 0, 0] as [number, number, number])
 	)
 
-// Draw a square
-
-// bitmap[0][0] = [255, 255, 255]
-
-for (let i = 1; i < height; i++) {
-	bitmap[i][0] = [255, 255, 255]
-	bitmap[i][width - 1] = [255, 255, 255]
+function rainbow(startColor: number) {
+	for (let row = 1; row < height; row++) {
+		for (let col = 0; col < width; col++) {
+			bitmap[row][col] = chroma
+				.hsl((startColor + row * 360 / height) % 360, 1, 0.5)
+				._rgb.slice(0, 3)
+		}
+	}
 }
 
-for (let i = 0; i < width; i++) {
-	bitmap[1][i] = [255, 255, 255]
-	bitmap[height - 1][i] = [255, 255, 255]
+function border() {
+	for (let i = 1; i < height; i++) {
+		bitmap[i][0] = [255, 255, 255]
+		bitmap[i][width - 1] = [255, 255, 255]
+	}
+
+	for (let i = 0; i < width; i++) {
+		bitmap[1][i] = [255, 255, 255]
+		bitmap[height - 1][i] = [255, 255, 255]
+	}
 }
 
 function render() {
@@ -145,10 +154,18 @@ function render() {
 		})
 
 		client.send(packet, function() {
-			console.log("sent")
+			// console.log("sent")
 		})
 	})
 }
 
-setInterval(render, 0)
-// render()
+let startColor = 0
+const speed = 1
+
+function update() {
+	startColor = (startColor + speed) % 360
+	rainbow(startColor)
+	render()
+}
+
+setInterval(update, 0)
