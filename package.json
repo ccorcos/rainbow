@@ -1,0 +1,23 @@
+{
+  "name": "rainbow",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ccorcos/rainbow.git"
+  },
+  "keywords": [],
+  "author": "Chet Corcos <ccorcos@gmail.com> (http://www.chetcorcos.com/)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ccorcos/rainbow/issues"
+  },
+  "homepage": "https://github.com/ccorcos/rainbow#readme",
+  "dependencies": {
+    "e131": "^1.1.1"
+  }
+}
