@@ -20,12 +20,12 @@ FixtureThickness = 2.1;
 
 
 // The width of the lip on the from of the cylinder
-FrontLipRadiusSize = 2;
+FrontLipRadiusSize = 1;
 FrontLipRadius = InnerRadius + FrontLipRadiusSize;
 FrontLipThickness = 0.5;
 
 // Thickness of the walls
-Thickness = 1;
+Thickness = 0.5;
 
 // Depth of the ridge radius
 RidgeRadius = 0.25;
