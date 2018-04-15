@@ -121,78 +121,108 @@ function rainbow(startColor: number) {
 	}
 }
 
-function border() {
+function border(inset: number) {
 	for (let i = 1; i < height; i++) {
-		bitmap[i][0] = [255, 255, 255]
-		bitmap[i][width - 1] = [255, 255, 255]
+		bitmap[i][inset] = [255, 255, 255]
+		bitmap[i][width - 1 - inset] = [255, 255, 255]
 	}
 
 	for (let i = 0; i < width; i++) {
-		bitmap[1][i] = [255, 255, 255]
-		bitmap[height - 1][i] = [255, 255, 255]
+		bitmap[1 + inset][i] = [255, 255, 255]
+		bitmap[height - 1 - inset][i] = [255, 255, 255]
 	}
 }
 
-function render() {
+async function render() {
 	const pixels = getPixelIndexesForOutputIndex(3).slice(0, 250)
 	const groups = _.groupBy(pixels, pixel => pixel.universeIndex)
-	Object.keys(groups).map(universeIndex => {
-		const pixelIndexes = groups[universeIndex]
+	return Promise.all(
+		Object.keys(groups).map((universeIndex, i) => {
+			const pixelIndexes = groups[universeIndex]
 
-		var packet = client.createPacket(channelsPerUniverse)
-		var slotsData = packet.getSlotsData()
-		packet.setUniverse(parseInt(universeIndex) + 1)
+			var packet = client.createPacket(channelsPerUniverse)
+			var slotsData = packet.getSlotsData()
+			packet.setUniverse(parseInt(universeIndex) + 1)
 
-		pixelIndexes.forEach(pixel => {
-			const y = pixel.index % height
-			const x = Math.floor(pixel.index / height)
+			pixelIndexes.forEach(pixel => {
+				const y = pixel.index % height
+				const x = Math.floor(pixel.index / height)
 
-			// Pixels zig zag to every other x goes up and down y.
-			const color = bitmap[x % 2 === 0 ? y : height - 1 - y][x] // 51 is 1, 101 is 2
-			slotsData[pixel.channelIndex] = color[0]
-			slotsData[pixel.channelIndex + 1] = color[1]
-			slotsData[pixel.channelIndex + 2] = color[2]
+				// Pixels zig zag to every other x goes up and down y.
+				const color = bitmap[x % 2 === 0 ? y : height - 1 - y][x] // 51 is 1, 101 is 2
+				slotsData[pixel.channelIndex] = color[0]
+				slotsData[pixel.channelIndex + 1] = color[1]
+				slotsData[pixel.channelIndex + 2] = color[2]
+			})
+
+			return new Promise(resolve => {
+				client.send(packet, function() {
+					resolve()
+				})
+			})
 		})
-
-		client.send(packet, function() {
-			// console.log("sent")
-		})
-	})
+	)
 }
 
-// let startColor = 0
-// const speed = 1
+let startColor = 0
+const speed = 10
 
-// function update() {
-// 	startColor = (startColor + speed) % 360
-// 	rainbow(startColor)
-// 	render()
-// }
+function oneLight(index: number) {
+	for (let row = 1; row < height; row++) {
+		for (let col = 0; col < width; col++) {
+			const on = index === col + row * width
+			bitmap[row][col] = on ? [255, 255, 255] : [0, 0, 0]
+		}
+	}
+}
 
-// setInterval(update, 0)
+async function update() {
+	let index = 0
 
-async function go(
-	color: [number, number, number],
-	next: [number, number, number]
-) {
-	const pixels = getPixelIndexesForOutputIndex(3)
-	const groups = _.groupBy(pixels, pixel => pixel.universeIndex)
+	const change = () => {
+		// index = (index + 1) % (width * height)
+		startColor = (startColor + speed) % 360
+		return wait().then(change)
+	}
+	wait().then(change)
 
-	Object.keys(groups).map(universeIndex => {
-		const pixelIndexes = groups[universeIndex]
-		var packet = client.createPacket(channelsPerUniverse)
-		var slotsData = packet.getSlotsData()
-		packet.setUniverse(parseInt(universeIndex) + 1)
-		pixelIndexes.forEach(pixel => {
-			slotsData[pixel.channelIndex] = color[0]
-			slotsData[pixel.channelIndex + 1] = color[1]
-			slotsData[pixel.channelIndex + 2] = color[2]
+	while (true) {
+		// oneLight(index)
+		// index = (index + 1) % (width * height)
+		// console.log(index)
+
+		// startColor = (startColor + speed) % 360
+		rainbow(startColor)
+		// border(0)
+
+		await render()
+		// await delay(100)
+	}
+}
+
+update()
+
+async function go(color: [number, number, number]) {
+	return new Promise(resolve => {
+		const pixels = getPixelIndexesForOutputIndex(3).slice(0, 250)
+		const groups = _.groupBy(pixels, pixel => pixel.universeIndex)
+
+		Object.keys(groups).map(universeIndex => {
+			const pixelIndexes = groups[universeIndex]
+			var packet = client.createPacket(channelsPerUniverse)
+			var slotsData = packet.getSlotsData()
+			packet.setUniverse(parseInt(universeIndex) + 1)
+			pixelIndexes.forEach(pixel => {
+				slotsData[pixel.channelIndex] = color[0]
+				slotsData[pixel.channelIndex + 1] = color[1]
+				slotsData[pixel.channelIndex + 2] = color[2]
+			})
+			client.send(packet, resolve)
 		})
-		client.send(packet, function() {})
-	})
 
-	await wait()
-	go(next, color)
+		// await wait()
+		// go(next, color)
+	})
 }
 
 function wait() {
@@ -204,8 +234,25 @@ function wait() {
 
 		rl.question("Enter>", () => {
 			rl.close()
+			resolve()
 		})
 	})
 }
 
-go([255, 0, 0], [0, 0, 255])
+async function test() {
+	const colors: Array<[number, number, number]> = [[255, 0, 0], [0, 0, 255]]
+
+	while (true) {
+		const color = colors.pop() as [number, number, number]
+		await go(color)
+		await delay(100)
+		colors.unshift(color)
+	}
+}
+
+// test()
+// setInterval(update, 0)
+
+async function delay(ms: number) {
+	return new Promise(resolve => setTimeout(resolve, ms))
+}
