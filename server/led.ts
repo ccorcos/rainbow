@@ -133,7 +133,7 @@ function border(inset: number) {
 	}
 }
 
-async function render() {
+async function renderLeds() {
 	const pixels = getPixelIndexesForOutputIndex(3).slice(0, 250)
 	const groups = _.groupBy(pixels, pixel => pixel.universeIndex)
 	return Promise.all(
@@ -176,31 +176,25 @@ function oneLight(index: number) {
 	}
 }
 
-async function update() {
-	let index = 0
-
-	const change = () => {
-		// index = (index + 1) % (width * height)
-		startColor = (startColor + speed) % 360
-		return wait().then(change)
-	}
-	wait().then(change)
-
-	while (true) {
-		// oneLight(index)
-		// index = (index + 1) % (width * height)
-		// console.log(index)
-
-		// startColor = (startColor + speed) % 360
-		rainbow(startColor)
-		// border(0)
-
-		await render()
-		// await delay(100)
+function random() {
+	for (let row = 1; row < height; row++) {
+		for (let col = 0; col < width; col++) {
+			bitmap[row][col] = [
+				Math.round(Math.random() * 255),
+				Math.round(Math.random() * 255),
+				Math.round(Math.random() * 255),
+			]
+		}
 	}
 }
 
-update()
+function solidColor(color: [number, number, number]) {
+	for (let row = 1; row < height; row++) {
+		for (let col = 0; col < width; col++) {
+			bitmap[row][col] = color
+		}
+	}
+}
 
 async function go(color: [number, number, number]) {
 	return new Promise(resolve => {
@@ -250,9 +244,72 @@ async function test() {
 	}
 }
 
-// test()
-// setInterval(update, 0)
-
 async function delay(ms: number) {
 	return new Promise(resolve => setTimeout(resolve, ms))
 }
+
+interface startArgs<T> {
+	init: T
+	update: (state: T) => T
+	render: (state: T) => void
+	frameRate: number
+	debug?: boolean
+}
+
+function start<T>({ init, update, render, frameRate, debug }: startArgs<T>) {
+	let state = init
+	const updateLoop = async () => {
+		while (true) {
+			state = update(state)
+			await render(state)
+			if (debug) {
+				await wait()
+			} else {
+				await delay(1 / frameRate * 1000)
+			}
+		}
+	}
+	const renderLoop = async () => {
+		while (true) {
+			await renderLeds()
+		}
+	}
+	updateLoop()
+	renderLoop()
+}
+
+// start({
+// 	init: startColor,
+// 	update: color => (color + speed) % 360,
+// 	render: color => rainbow(color),
+// 	frameRate: 30,
+// })
+
+// start({
+// 	init: 0,
+// 	update: index => (index + 1) % (width * height),
+// 	render: index => oneLight(index),
+// 	frameRate: 30,
+// })
+
+// start({
+// 	init: 0,
+// 	update: anything => anything,
+// 	render: index => random(),
+// 	frameRate: 1,
+// })
+
+start({
+	init: true,
+	update: bool => !bool,
+	render: bool => solidColor(bool ? [255, 0, 0] : [0, 0, 255]),
+	frameRate: 1,
+	debug: true,
+})
+
+// const change = () => {
+// 	// index = (index + 1) % (width * height)
+// 	startColor = (startColor + speed) % 360
+// 	return wait().then(change)
+// }
+// wait().then(change)
