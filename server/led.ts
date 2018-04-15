@@ -1,6 +1,7 @@
 import * as e131 from "e131"
 import * as _ from "lodash"
 import * as chroma from "chroma-js"
+import * as readline from "readline"
 
 const channelsPerPixel = 3
 const channelsPerUniverse = 510
@@ -159,13 +160,52 @@ function render() {
 	})
 }
 
-let startColor = 0
-const speed = 1
+// let startColor = 0
+// const speed = 1
 
-function update() {
-	startColor = (startColor + speed) % 360
-	rainbow(startColor)
-	render()
+// function update() {
+// 	startColor = (startColor + speed) % 360
+// 	rainbow(startColor)
+// 	render()
+// }
+
+// setInterval(update, 0)
+
+async function go(
+	color: [number, number, number],
+	next: [number, number, number]
+) {
+	const pixels = getPixelIndexesForOutputIndex(3)
+	const groups = _.groupBy(pixels, pixel => pixel.universeIndex)
+
+	Object.keys(groups).map(universeIndex => {
+		const pixelIndexes = groups[universeIndex]
+		var packet = client.createPacket(channelsPerUniverse)
+		var slotsData = packet.getSlotsData()
+		packet.setUniverse(parseInt(universeIndex) + 1)
+		pixelIndexes.forEach(pixel => {
+			slotsData[pixel.channelIndex] = color[0]
+			slotsData[pixel.channelIndex + 1] = color[1]
+			slotsData[pixel.channelIndex + 2] = color[2]
+		})
+		client.send(packet, function() {})
+	})
+
+	await wait()
+	go(next, color)
 }
 
-setInterval(update, 0)
+function wait() {
+	return new Promise(resolve => {
+		const rl = readline.createInterface({
+			input: process.stdin,
+			output: process.stdout,
+		})
+
+		rl.question("Enter>", () => {
+			rl.close()
+		})
+	})
+}
+
+go([255, 0, 0], [0, 0, 255])
