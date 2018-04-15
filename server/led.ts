@@ -233,17 +233,6 @@ function wait() {
 	})
 }
 
-async function test() {
-	const colors: Array<[number, number, number]> = [[255, 0, 0], [0, 0, 255]]
-
-	while (true) {
-		const color = colors.pop() as [number, number, number]
-		await go(color)
-		await delay(100)
-		colors.unshift(color)
-	}
-}
-
 async function delay(ms: number) {
 	return new Promise(resolve => setTimeout(resolve, ms))
 }
@@ -299,17 +288,103 @@ function start<T>({ init, update, render, frameRate, debug }: startArgs<T>) {
 // 	frameRate: 1,
 // })
 
-start({
-	init: true,
-	update: bool => !bool,
-	render: bool => solidColor(bool ? [255, 0, 0] : [0, 0, 255]),
-	frameRate: 1,
-	debug: true,
-})
+// start({
+// 	init: true,
+// 	update: bool => !bool,
+// 	render: bool => solidColor(bool ? [255, 0, 0] : [0, 0, 255]),
+// 	frameRate: 1,
+// 	debug: true,
+// })
 
-// const change = () => {
-// 	// index = (index + 1) % (width * height)
-// 	startColor = (startColor + speed) % 360
-// 	return wait().then(change)
-// }
-// wait().then(change)
+async function renderTestSolidColor(color: [number, number, number]) {
+	const pixels = getPixelIndexesForOutputIndex(3)
+	const groups = _.groupBy(pixels, pixel => pixel.universeIndex)
+	return Promise.all(
+		Object.keys(groups).map((universeIndex, i) => {
+			const pixelIndexes = groups[universeIndex]
+
+			var packet = client.createPacket(channelsPerUniverse)
+			var slotsData = packet.getSlotsData()
+			packet.setUniverse(parseInt(universeIndex) + 1)
+
+			pixelIndexes.forEach(pixel => {
+				slotsData[pixel.channelIndex] = color[0]
+				slotsData[pixel.channelIndex + 1] = color[1]
+				slotsData[pixel.channelIndex + 2] = color[2]
+			})
+
+			return new Promise(resolve => {
+				client.send(packet, function() {
+					resolve()
+				})
+			})
+		})
+	)
+}
+
+function testSolidColor() {
+	let state = true
+	const updateLoop = async () => {
+		while (true) {
+			state = !state
+			// await wait()
+			await delay(1 / 10 * 1000)
+		}
+	}
+	const renderLoop = async () => {
+		while (true) {
+			await renderTestSolidColor(state ? [255, 0, 0] : [0, 0, 255])
+		}
+	}
+	updateLoop()
+	renderLoop()
+}
+
+async function renderTestSweep(index: number) {
+	const pixels = getPixelIndexesForOutputIndex(3)
+	const groups = _.groupBy(pixels, pixel => pixel.universeIndex)
+	return Promise.all(
+		Object.keys(groups).map((universeIndex, i) => {
+			const pixelIndexes = groups[universeIndex]
+
+			var packet = client.createPacket(channelsPerUniverse)
+			var slotsData = packet.getSlotsData()
+			packet.setUniverse(parseInt(universeIndex) + 1)
+
+			pixelIndexes.forEach(pixel => {
+				if (pixel.index === index) {
+					slotsData[pixel.channelIndex] = 255
+					slotsData[pixel.channelIndex + 1] = 255
+					slotsData[pixel.channelIndex + 2] = 255
+				}
+			})
+
+			return new Promise(resolve => {
+				client.send(packet, function() {
+					resolve()
+				})
+			})
+		})
+	)
+}
+
+function testSweep() {
+	let state = 0
+	const updateLoop = async () => {
+		while (true) {
+			state = (state + 1) % pixelsPerOutput
+			// await wait()
+			await delay(1 / 30 * 1000)
+		}
+	}
+	const renderLoop = async () => {
+		while (true) {
+			await renderTestSweep(state)
+		}
+	}
+	updateLoop()
+	renderLoop()
+}
+
+testSweep()
+// testSolidColor()
