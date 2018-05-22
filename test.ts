@@ -44,7 +44,7 @@ function render() {
 		}
 		packet.setUniverse(i)
 		// packet.setSourceName("???")
-		packet.setOption(packet.Options.PREVIEW, true)
+		// packet.setOption(packet.Options.PREVIEW, true)
 		// packet.setPriority(packet.DEFAULT_PRIORITY)
 		client.send(packet)
 	}
