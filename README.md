@@ -19,6 +19,8 @@ brew install cairo
 
 ## To Do
 
-- Efficiently draw visualization, for example, using https://github.com/Automattic/node-canvas
-- Efficiently generate packets using matrix operations, for example, using https://github.com/tensorflow/tfjs
-- Draw visualizations on in the browser while also rendering on the client
+- [x] Efficiently draw visualization, for example, using https://github.com/Automattic/node-canvas
+- [ ] Client / Server abstractions
+- [ ] Preview on the client, render on the server
+- [ ] Draw visualizations on in the browser while also rendering on the client
+- [ ] Efficiently generate packets using matrix operations, for example, using https://github.com/tensorflow/tfjs
