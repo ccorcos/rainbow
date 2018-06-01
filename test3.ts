@@ -3,6 +3,20 @@ import * as _ from "lodash"
 import * as chroma from "chroma-js"
 import * as readline from "readline"
 
+/*
+
+Pixelite Controller has "output".
+
+e1.31 is a LED UDP protocol.
+Each UDP packet has 510 bytes which is 170 pixels.
+A group of 170 pixels is called a "universe".
+
+A Pixelite can "output" 550 pixels.
+A single "output" contains ~3.23 "universes"
+A single controller has 16 outputs.
+
+*/
+
 const pixeliteOutputIndex = 4 // Index is the output number - 1
 const height = 25
 const width = 10
@@ -53,6 +67,36 @@ function getPixelIndexesForOutputIndex(outputIndex: number) {
 // The board only has 250 LEDs.
 const pixels = getPixelIndexesForOutputIndex(4).slice(0, 250)
 
+async function draw() {
+	const groups = _.groupBy(pixels, pixel => pixel.universeIndex)
+	return Promise.all(
+		Object.keys(groups).map((universeIndex, i) => {
+			const pixelIndexes = groups[universeIndex]
+
+			var packet = client.createPacket(channelsPerUniverse)
+			var slotsData = packet.getSlotsData()
+			packet.setUniverse(parseInt(universeIndex) + 1)
+
+			pixelIndexes.forEach(pixel => {
+				const y = pixel.index % height
+				const x = Math.floor(pixel.index / height)
+
+				// Pixels zig zag to every other x goes up and down y.
+				const color = bitmap[x % 2 === 0 ? y : height - 1 - y][x] // 51 is 1, 101 is 2
+				slotsData[pixel.channelIndex] = color[0]
+				slotsData[pixel.channelIndex + 1] = color[1]
+				slotsData[pixel.channelIndex + 2] = color[2]
+			})
+
+			return new Promise(resolve => {
+				client.send(packet, function() {
+					resolve()
+				})
+			})
+		})
+	)
+}
+
 // Bitmap representing the panel
 const bitmap: Array<Array<[number, number, number]>> = Array(height)
 	.fill(0)
@@ -93,34 +137,8 @@ function renderOneLight(index: number) {
 	}
 }
 
-async function draw() {
-	const groups = _.groupBy(pixels, pixel => pixel.universeIndex)
-	return Promise.all(
-		Object.keys(groups).map((universeIndex, i) => {
-			const pixelIndexes = groups[universeIndex]
-
-			var packet = client.createPacket(channelsPerUniverse)
-			var slotsData = packet.getSlotsData()
-			packet.setUniverse(parseInt(universeIndex) + 1)
-
-			pixelIndexes.forEach(pixel => {
-				const y = pixel.index % height
-				const x = Math.floor(pixel.index / height)
-
-				// Pixels zig zag to every other x goes up and down y.
-				const color = bitmap[x % 2 === 0 ? y : height - 1 - y][x] // 51 is 1, 101 is 2
-				slotsData[pixel.channelIndex] = color[0]
-				slotsData[pixel.channelIndex + 1] = color[1]
-				slotsData[pixel.channelIndex + 2] = color[2]
-			})
-
-			return new Promise(resolve => {
-				client.send(packet, function() {
-					resolve()
-				})
-			})
-		})
-	)
+async function delay(ms: number) {
+	return new Promise(resolve => setTimeout(resolve, ms))
 }
 
 function wait() {
@@ -143,7 +161,9 @@ const speed = 10
 async function main() {
 	while (true) {
 		await wait()
+		// await delay(1000 / 60)
 		renderRainbow(startColor)
+		renderBorder(0)
 		await draw()
 		startColor += speed
 	}

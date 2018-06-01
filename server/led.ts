@@ -341,7 +341,7 @@ function testSolidColor() {
 }
 
 async function renderTestSweep(index: number) {
-	const pixels = getPixelIndexesForOutputIndex(4)
+	const pixels = getPixelIndexesForOutputIndex(3)
 	const groups = _.groupBy(pixels, pixel => pixel.universeIndex)
 	return Promise.all(
 		Object.keys(groups).map((universeIndex, i) => {
