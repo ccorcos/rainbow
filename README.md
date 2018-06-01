@@ -15,3 +15,9 @@ cd rainbow
 npm install
 ./node_modules/.bin/ts-node test.ts
 ```
+
+## To Do
+
+- Efficiently draw visualization, for example, using https://github.com/Automattic/node-canvas
+- Efficiently generate packets using matrix operations, for example, using https://github.com/tensorflow/tfjs
+- Draw visualizations on in the browser while also rendering on the client
