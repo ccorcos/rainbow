@@ -156,16 +156,19 @@ function wait() {
 }
 
 let startColor = 0
+let pixelIndex = 0
 const speed = 10
 
 async function main() {
 	while (true) {
-		await wait()
-		// await delay(1000 / 60)
+		// await wait()
+		await delay(1000 / 60)
 		renderRainbow(startColor)
-		renderBorder(0)
+		// renderBorder(0)
+		// renderOneLight(pixelIndex)
 		await draw()
 		startColor += speed
+		// pixelIndex += 1 % 250
 	}
 }
 
