@@ -13,6 +13,7 @@ More documentation [here](https://www.notion.so/rainbowbridge/Team-Home-c0645d0a
 git clone git@github.com:ccorcos/rainbow.git
 cd rainbow
 npm install
+brew install cairo
 ./node_modules/.bin/ts-node test.ts
 ```
 
