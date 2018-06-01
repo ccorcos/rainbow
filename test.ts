@@ -40,7 +40,7 @@ function render() {
 		var slotsData = packet.getSlotsData()
 		// Color every 3rd pixel
 		for (let j = offset; j < 510; j += 3) {
-			slotsData[j] = 255
+			slotsData[j] = 15
 		}
 		packet.setUniverse(i)
 		// packet.setSourceName("???")
