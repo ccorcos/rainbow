@@ -1,24 +1,27 @@
 import * as React from "react"
-import { Value } from "reactive-magic"
-import Component from "reactive-magic/component"
+import scenes from "../scenes"
+import Preview from "./Preview"
 
-export default class App extends Component {
-	count = new Value(0)
+type SceneName = keyof typeof scenes
 
-	increment = () => {
-		this.count.update(count => count + 1)
+const sceneNames = Object.keys(scenes) as Array<SceneName>
+
+export default class App extends React.Component<{}, { scene: SceneName }> {
+	state = { scene: "hueSweep" as "hueSweep" }
+
+	setScene = (scene: SceneName) => {
+		this.setState({ scene })
 	}
 
-	decrement = () => {
-		this.count.update(count => count - 1)
-	}
-
-	view() {
+	render() {
 		return (
 			<div>
-				<button onClick={this.decrement}>{"-"}</button>
-				<span>{this.count.get()}</span>
-				<button onClick={this.increment}>{"+"}</button>
+				<div>
+					<Preview key={this.state.scene} scene={this.state.scene} />
+				</div>
+				{sceneNames.map(sceneName => (
+					<button onClick={() => this.setScene(sceneName)}>{sceneName}</button>
+				))}
 			</div>
 		)
 	}
