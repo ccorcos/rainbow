@@ -1,9 +1,7 @@
 import * as React from "react"
 import scenes from "../scenes"
 import * as config from "../config"
-import { Scene } from "../types"
-
-type SceneName = keyof typeof scenes
+import { Scene, SceneName } from "../types"
 
 export default class App extends React.Component<{ scene: SceneName }> {
 	canvas: HTMLCanvasElement
@@ -18,7 +16,7 @@ export default class App extends React.Component<{ scene: SceneName }> {
 	}
 
 	componentDidMount() {
-		const scene = scenes[this.props.scene] as Scene<any>
+		const scene = scenes[this.props.scene] as Scene<any> // TODO: better types
 		this.sceneState = scene.init()
 		this.ctx = this.canvas.getContext("2d") as CanvasRenderingContext2D
 		this.stop = loop(() => {

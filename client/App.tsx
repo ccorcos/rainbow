@@ -1,16 +1,14 @@
 import * as React from "react"
-import scenes from "../scenes"
 import Preview from "./Preview"
-
-type SceneName = keyof typeof scenes
-
-const sceneNames = Object.keys(scenes) as Array<SceneName>
+import { SceneName, sceneNames } from "../types"
+import * as api from "./api"
 
 export default class App extends React.Component<{}, { scene: SceneName }> {
 	state = { scene: "hueSweep" as "hueSweep" }
 
 	setScene = (scene: SceneName) => {
 		this.setState({ scene })
+		api.setScene({ scene })
 	}
 
 	render() {
