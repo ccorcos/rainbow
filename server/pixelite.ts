@@ -24,35 +24,35 @@ const bytesPerPixel = 3
 const bytesPerUniverse = 510
 const pixelsPerOutput = 550
 
-// Note: Universe, Channel, and Output "numbers" start at 1, but the "index" will start at 0
+// Note: Universe and Output "numbers" start at 1, but the "index" will start at 0
 function getPixelIndexesForOutputIndex(outputIndex: number) {
 	const universeStartIndex = Math.floor(
 		((pixelsPerOutput * bytesPerPixel) / bytesPerUniverse) * outputIndex
 	)
-	const channelStartIndex =
+	const byteStartIndex =
 		(pixelsPerOutput * bytesPerPixel * outputIndex) % bytesPerUniverse
 
 	const pixelIndexes: Array<{
-		channelIndex: number
+		byteIndex: number
 		universeIndex: number
 		index: number
 	}> = []
 
 	let index = 0
 	let currentUniverseIndex = universeStartIndex
-	let currentChannelIndex = channelStartIndex
+	let currentByteIndex = byteStartIndex
 	for (let i = 0; i < pixelsPerOutput; i++) {
-		if (currentChannelIndex >= bytesPerUniverse) {
+		if (currentByteIndex >= bytesPerUniverse) {
 			currentUniverseIndex += 1
-			currentChannelIndex = 0
+			currentByteIndex = 0
 		}
 		pixelIndexes.push({
 			index,
 			universeIndex: currentUniverseIndex,
-			channelIndex: currentChannelIndex,
+			byteIndex: currentByteIndex,
 		})
 		index++
-		currentChannelIndex += bytesPerPixel
+		currentByteIndex += bytesPerPixel
 	}
 	return pixelIndexes
 }
@@ -85,9 +85,9 @@ export async function render(ctx: CanvasRenderingContext2D) {
 				const bitmapx = x
 
 				const index = bitmapy * config.width * 4 + bitmapx * 4
-				slotsData[pixel.channelIndex] = px.data[index]
-				slotsData[pixel.channelIndex + 1] = px.data[index + 1]
-				slotsData[pixel.channelIndex + 2] = px.data[index + 2]
+				slotsData[pixel.byteIndex] = px.data[index]
+				slotsData[pixel.byteIndex + 1] = px.data[index + 1]
+				slotsData[pixel.byteIndex + 2] = px.data[index + 2]
 			})
 
 			return new Promise(resolve => client.send(packet, resolve))
