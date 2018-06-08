@@ -3,8 +3,11 @@ import * as config from "../config"
 
 const WalkScene: Scene<{ index: number }> = {
 	init: () => ({ index: 0 }),
-	update: ({ index }) => ({ index: index + 1 }),
+	update: ({ index }) => ({
+		index: (index + 1) % (config.width * config.height),
+	}),
 	render: (ctx, { index }) => {
+		console.log(index)
 		const row = Math.floor(index / config.width)
 		const col = index % config.width
 		ctx.fillStyle = "black"

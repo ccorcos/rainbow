@@ -18,7 +18,7 @@ function fromOffset(offset: number) {
 	}
 }
 
-const min = toOffset({ universe: 13, byte: 181 })
+const min = toOffset({ universe: 13, byte: 481 })
 const max = min + 450 * 3
 
 async function send() {
