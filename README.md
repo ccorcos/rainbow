@@ -17,6 +17,12 @@ brew install cairo
 ./node_modules/.bin/ts-node test.ts
 ```
 
+## Not Working
+
+- Does the Advatek Assistant work?
+- Is it setup for e1.31 or artnet?
+- Are the outputs mapped to universe 1 channel 1 sequential?
+
 ## To Do
 
 - [x] Efficiently draw visualization, for example, using https://github.com/Automattic/node-canvas
@@ -24,3 +30,4 @@ brew install cairo
 - [ ] Preview on the client, render on the server
 - [ ] Draw visualizations on in the browser while also rendering on the client
 - [ ] Efficiently generate packets using matrix operations, for example, using https://github.com/tensorflow/tfjs
+

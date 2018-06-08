@@ -27,7 +27,7 @@ const pixelsPerOutput = 550
 // Note: Universe, Channel, and Output "numbers" start at 1, but the "index" will start at 0
 function getPixelIndexesForOutputIndex(outputIndex: number) {
 	const universeStartIndex = Math.floor(
-		pixelsPerOutput * bytesPerPixel / bytesPerUniverse * outputIndex
+		((pixelsPerOutput * bytesPerPixel) / bytesPerUniverse) * outputIndex
 	)
 	const channelStartIndex =
 		(pixelsPerOutput * bytesPerPixel * outputIndex) % bytesPerUniverse

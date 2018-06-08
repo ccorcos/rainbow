@@ -1,6 +1,6 @@
-// Dimensions of the test board.
-export const height = 25
-export const width = 10
+// Dimensions of the test panel.
+export const height = 30
+export const width = 15
 
 // Render rate
 export const frameRate = 60
