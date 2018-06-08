@@ -17,6 +17,7 @@ function handler<T extends keyof Api>(
 	fn: (input: Api[T]["input"]) => Promise<Api[T]["output"]>
 ) {
 	app.post(`/api/${name}`, async (req, res) => {
+		console.log(name, req)
 		const result = await fn(req.body)
 		res.json(result)
 	})
@@ -28,6 +29,7 @@ handler("setScene", async ({ scene }) => {
 	if (currentLoop) {
 		currentLoop()
 	}
+	console.log("set scene", scene)
 	currentLoop = loop(scenes[scene] as Scene<any>) // TODO: better types
 	return {}
 })

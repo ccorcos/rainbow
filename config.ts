@@ -3,7 +3,7 @@ export const height = 30
 export const width = 15
 
 // Render rate
-export const frameRate = 60
+export const frameRate = 20
 
 // Index starts at 0
 export const pixeliteOutputIndex = 4

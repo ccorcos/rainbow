@@ -7,7 +7,6 @@ const WalkScene: Scene<{ index: number }> = {
 		index: (index + 1) % (config.width * config.height),
 	}),
 	render: (ctx, { index }) => {
-		console.log(index)
 		const row = Math.floor(index / config.width)
 		const col = index % config.width
 		ctx.fillStyle = "black"

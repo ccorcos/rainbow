@@ -108,21 +108,21 @@ export async function render(ctx: CanvasRenderingContext2D) {
 				const { x, y } = pixelIndexToXY(pixel.index)
 				const offset = getImageDataOffset({ x, y })
 
-				if (imageData[offset] === 255) {
-					console.log({
-						index: pixel.index,
-						x,
-						y,
-						imgIndex: offset,
-						imgData: [
-							imageData[offset],
-							imageData[offset + 1],
-							imageData[offset + 2],
-						],
-						universe,
-						byte: pixel.byte,
-					})
-				}
+				// if (imageData[offset] === 255) {
+				// 	console.log({
+				// 		index: pixel.index,
+				// 		x,
+				// 		y,
+				// 		imgIndex: offset,
+				// 		imgData: [
+				// 			imageData[offset],
+				// 			imageData[offset + 1],
+				// 			imageData[offset + 2],
+				// 		],
+				// 		universe,
+				// 		byte: pixel.byte,
+				// 	})
+				// }
 
 				slotsData[pixel.byte] = imageData[offset]
 				slotsData[pixel.byte + 1] = imageData[offset + 1]
