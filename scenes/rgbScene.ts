@@ -1,7 +1,7 @@
 import { Scene } from "../types"
 import * as config from "../config"
 
-const RGBScene: Scene<{ index: number }> = {
+const rgbScene: Scene<{ index: number }> = {
 	init: () => ({ index: 0 }),
 	update: ({ index }) => ({ index: (index + 1) % 3 }),
 	render: (ctx, { index }) => {
@@ -10,4 +10,4 @@ const RGBScene: Scene<{ index: number }> = {
 	},
 }
 
-export default RGBScene
+export default rgbScene

@@ -4,7 +4,7 @@ import * as chroma from "chroma-js"
 
 const speed = 10
 
-const HueSweepScene: Scene<{ startColor: number }> = {
+const sueSweepScene: Scene<{ startColor: number }> = {
 	init: () => ({ startColor: 0 }),
 	update: ({ startColor }) => ({ startColor: startColor + speed }),
 	render: (ctx, { startColor }) => {
@@ -19,4 +19,4 @@ const HueSweepScene: Scene<{ startColor: number }> = {
 	},
 }
 
-export default HueSweepScene
+export default sueSweepScene

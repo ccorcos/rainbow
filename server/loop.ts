@@ -1,3 +1,10 @@
+/* ================================================================================
+
+	loop.
+	Render a scene to canvas and run the render loop.
+
+================================================================================ */
+
 import { Scene } from "../types"
 import * as readline from "readline"
 import * as pixelite from "./pixelite"

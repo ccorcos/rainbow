@@ -1,11 +1,20 @@
-import * as e131 from "e131"
+/* ================================================================================
 
-const client = new e131.Client("192.168.1.69") // or use a universe
+	Attempt to walk through every LED start
+	./node_modules/.bin/ts-node tests/rawTest2.ts
+
+================================================================================ */
+
+import * as e131 from "e131"
 
 // Open Advatek Assistant. Check out the start universe and channel for the
 // output from the pixelite and this will iterate through them.
-// universe 13
-// byte offset 181
+
+const startUniverse = 13
+const startByte = 481
+const numPixels = 450
+
+const client = new e131.Client("192.168.1.69") // or use a universe
 
 function toOffset(args: { universe: number; byte: number }) {
 	return args.universe * 510 + args.byte
@@ -18,8 +27,8 @@ function fromOffset(offset: number) {
 	}
 }
 
-const min = toOffset({ universe: 13, byte: 481 })
-const max = min + 450 * 3
+const min = toOffset({ universe: startUniverse, byte: startByte })
+const max = min + numPixels * 3
 
 async function send() {
 	let i = min

@@ -1,7 +1,7 @@
 import { Scene } from "../types"
 import * as config from "../config"
 
-const BorderScene: Scene<null> = {
+const borderScene: Scene<null> = {
 	init: () => null,
 	update: () => null,
 	render: ctx => {
@@ -9,4 +9,4 @@ const BorderScene: Scene<null> = {
 	},
 }
 
-export default BorderScene
+export default borderScene

@@ -24,11 +24,11 @@ const bytesPerPixel = 3
 const bytesPerUniverse = 510
 const pixelsPerOutput = 550
 
-function toOffset(args: { universe: number; byte: number }) {
+export function toOffset(args: { universe: number; byte: number }) {
 	return args.universe * bytesPerUniverse + args.byte
 }
 
-function fromOffset(offset: number) {
+export function fromOffset(offset: number) {
 	return {
 		universe: Math.floor(offset / bytesPerUniverse),
 		byte: offset % bytesPerUniverse,
@@ -36,7 +36,7 @@ function fromOffset(offset: number) {
 }
 
 // Note: Universe and Output "numbers" start at 1, but the "index" will start at 0
-function getPixelIndexesForOutputIndex(outputIndex: number) {
+export function getPixelIndexesForOutputIndex(outputIndex: number) {
 	const startOffset = pixelsPerOutput * bytesPerPixel * outputIndex
 	return Array(pixelsPerOutput)
 		.fill(0)

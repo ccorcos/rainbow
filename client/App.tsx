@@ -1,5 +1,11 @@
+/* ================================================================================
+
+	App.
+
+================================================================================ */
+
 import * as React from "react"
-import Preview from "./Preview"
+import PreviewScene from "./PreviewScene"
 import { SceneName, sceneNames } from "../types"
 import * as api from "./api"
 
@@ -15,7 +21,7 @@ export default class App extends React.Component<{}, { scene: SceneName }> {
 		return (
 			<div>
 				<div>
-					<Preview key={this.state.scene} scene={this.state.scene} />
+					<PreviewScene key={this.state.scene} scene={this.state.scene} />
 				</div>
 				{sceneNames.map(sceneName => (
 					<button onClick={() => this.setScene(sceneName)}>{sceneName}</button>

@@ -1,9 +1,17 @@
+/* ================================================================================
+
+	PreviewScene.
+
+================================================================================ */
+
 import * as React from "react"
-import scenes from "../scenes"
+import scenes from "../scenes/allScenes"
 import * as config from "../config"
 import { Scene, SceneName } from "../types"
 
-export default class App extends React.Component<{ scene: SceneName }> {
+export default class PreviewScene extends React.Component<{
+	scene: SceneName
+}> {
 	canvas: HTMLCanvasElement
 	ctx: CanvasRenderingContext2D
 	sceneState: any

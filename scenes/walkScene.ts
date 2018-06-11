@@ -1,7 +1,7 @@
 import { Scene } from "../types"
 import * as config from "../config"
 
-const WalkScene: Scene<{ index: number }> = {
+const walkScene: Scene<{ index: number }> = {
 	init: () => ({ index: 0 }),
 	update: ({ index }) => ({
 		index: (index + 1) % (config.width * config.height),
@@ -16,4 +16,4 @@ const WalkScene: Scene<{ index: number }> = {
 	},
 }
 
-export default WalkScene
+export default walkScene

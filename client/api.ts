@@ -1,6 +1,17 @@
+/* ================================================================================
+
+	api.
+
+================================================================================ */
+
 import { Api } from "../types"
 
-function post<T extends keyof Api>(name: T) {
+// ===========================================================================
+// postApi.
+// Send a post request to the server.
+// ===========================================================================
+
+function postApi<T extends keyof Api>(name: T) {
 	return async (input: Api[T]["input"]) => {
 		const response = await fetch(`/api/${name}`, {
 			method: "post",
@@ -14,4 +25,8 @@ function post<T extends keyof Api>(name: T) {
 	}
 }
 
-export const setScene = post("setScene")
+// ===========================================================================
+// setScene.
+// ===========================================================================
+
+export const setScene = postApi("setScene")

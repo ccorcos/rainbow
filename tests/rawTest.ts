@@ -1,3 +1,10 @@
+/* ================================================================================
+
+	Attempt to broadcast over everything.
+	./node_modules/.bin/ts-node tests/rawTest.ts
+
+================================================================================ */
+
 import * as e131 from "e131"
 
 const client = new e131.Client("192.168.1.69") // or use a universe
