@@ -2,8 +2,14 @@ import rgbScene from "./rgbScene"
 import hueSweepScene from "./hueSweepScene"
 import borderScene from "./borderScene"
 import walkScene from "./walkScene"
+import zoomScene from "./zoomScene"
+import bounceScene from "./bounceScene"
+import particleScene from "./particleScene"
 
 const scenes = {
+	bounceScene,
+	particleScene,
+	zoomScene,
 	rgbScene,
 	hueSweepScene,
 	borderScene,

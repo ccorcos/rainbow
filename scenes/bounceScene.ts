@@ -1,7 +1,9 @@
 import { Scene } from "../types"
 import * as config from "../config"
 
-const BounceScene: Scene<{ x: number; y: number; dx: number; dy: number }> = {
+const size = 2
+
+const bounceScene: Scene<{ x: number; y: number; dx: number; dy: number }> = {
 	init: () => {
 		return {
 			x: 0,
@@ -11,31 +13,26 @@ const BounceScene: Scene<{ x: number; y: number; dx: number; dy: number }> = {
 		}
 	},
 	update: state => {
-		var new_dx: number = state.dx
-		if (state.x <= 0 && new_dx < 0) {
-			new_dx = -state.dx
-		} else if (state.x >= config.width - 2 && new_dx > 0) {
-			new_dx = -state.dx
+		if (state.x <= 0 && state.dx < 0) {
+			state.dx = -state.dx
+		} else if (state.x >= config.width - size && state.dx > 0) {
+			state.dx = -state.dx
 		}
-		var new_dy: number = state.dy
-		if (state.y <= 0 && new_dx < 0) {
-			new_dy = -state.dy
-		} else if (state.y >= config.height - 2 && new_dx > 0) {
-			new_dy = -state.dy
+		if (state.y <= 0 && state.dy < 0) {
+			state.dy = -state.dy
+		} else if (state.y >= config.height - size && state.dy > 0) {
+			state.dy = -state.dy
 		}
-		return {
-			x: state.x + state.dx,
-			y: state.y + state.dy,
-			dx: new_dx,
-			dy: new_dy,
-		}
+		state.x += state.dx
+		state.y += state.dy
+		return state
 	},
 	render: (ctx, state) => {
 		ctx.fillStyle = "black"
 		ctx.fillRect(0, 0, config.width, config.height)
 		ctx.fillStyle = "white"
-		ctx.fillRect(state.x, state.y, 2, 2)
+		ctx.fillRect(state.x, state.y, size, size)
 	},
 }
 
-export default BounceScene
+export default bounceScene

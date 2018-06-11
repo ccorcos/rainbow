@@ -44,4 +44,5 @@ handler("setScene", async ({ scene }) => {
 const bundler = new Bundler(path.resolve(__dirname, "../client/index.html"))
 app.use(bundler.middleware())
 
+console.log("Running at http://localhost:8080")
 app.listen(8080)
