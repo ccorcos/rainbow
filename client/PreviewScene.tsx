@@ -5,9 +5,9 @@
 ================================================================================ */
 
 import * as React from "react"
-import scenes from "../scenes/allScenes"
+import scenes, { SceneName, sceneNames } from "../scenes/allScenes"
 import * as config from "../config"
-import { Scene, SceneName } from "../types"
+import { Scene } from "../types"
 
 export default class PreviewScene extends React.Component<{
 	scene: SceneName

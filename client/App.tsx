@@ -6,11 +6,12 @@
 
 import * as React from "react"
 import PreviewScene from "./PreviewScene"
-import { SceneName, sceneNames } from "../types"
+import { SceneName, sceneNames } from "../scenes/allScenes"
+
 import * as api from "./api"
 
 export default class App extends React.Component<{}, { scene: SceneName }> {
-	state = { scene: "hueSweep" as "hueSweep" }
+	state = { scene: "hueSweepScene" as SceneName }
 
 	setScene = (scene: SceneName) => {
 		this.setState({ scene })

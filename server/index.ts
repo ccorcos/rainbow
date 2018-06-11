@@ -23,7 +23,6 @@ function handler<T extends keyof Api>(
 	fn: (input: Api[T]["input"]) => Promise<Api[T]["output"]>
 ) {
 	app.post(`/api/${name}`, async (req, res) => {
-		console.log(name, req)
 		const result = await fn(req.body)
 		res.json(result)
 	})
