@@ -28,11 +28,17 @@ brew install cairo
 - [x] Efficiently draw visualization, for example, using https://github.com/Automattic/node-canvas
 - [x] Client / Server abstractions
 - [x] Preview on the client, render on the server
-	- [] fix the borderScene
-	- [] bounceScene
+	- [x] fix the borderScene
+	- [x] bounceScene
 	- [] other ideas...
 - [] stress test
-	- [] full size test
-	- []
+	- [] full size test.
+		28 boards per side with 450 pixels per board. 28 * 450 = 12600
+		One pixelite has 16 outputs with 550 pixels per output. 16*550 = 8800
+		12600 * 2 / 8800 = 2.86. We can do this with 3 pixelites. 4 would be easier...
+
+		- [] fullsize rainbow. start at output 1. 14 boards for one pixelite.
+		-
+
 - [ ] Efficiently generate packets using matrix operations, for example, using https://github.com/tensorflow/tfjs
 

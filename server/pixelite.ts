@@ -47,11 +47,19 @@ export function getPixelIndexesForOutputIndex(outputIndex: number) {
 		})
 }
 
-// The text board only has 250 LEDs.
-const pixels = getPixelIndexesForOutputIndex(config.pixeliteOutputIndex).slice(
-	0,
-	config.width * config.height
+const allPixels = _.flatten(
+	Array(16)
+		.fill(0)
+		.map((_, outputIndex) => getPixelIndexesForOutputIndex(outputIndex))
 )
+
+// The text board only has 250 LEDs.
+// const pixels = getPixelIndexesForOutputIndex(config.pixeliteOutputIndex).slice(
+// 	0,
+// 	config.width * config.height
+// )
+
+const pixels = allPixels
 
 // console.log(
 // 	JSON.stringify(
@@ -107,22 +115,6 @@ export async function render(ctx: CanvasRenderingContext2D) {
 			pixels.forEach(pixel => {
 				const { x, y } = pixelIndexToXY(pixel.index)
 				const offset = getImageDataOffset({ x, y })
-
-				// if (imageData[offset] === 255) {
-				// 	console.log({
-				// 		index: pixel.index,
-				// 		x,
-				// 		y,
-				// 		imgIndex: offset,
-				// 		imgData: [
-				// 			imageData[offset],
-				// 			imageData[offset + 1],
-				// 			imageData[offset + 2],
-				// 		],
-				// 		universe,
-				// 		byte: pixel.byte,
-				// 	})
-				// }
 
 				slotsData[pixel.byte] = imageData[offset]
 				slotsData[pixel.byte + 1] = imageData[offset + 1]

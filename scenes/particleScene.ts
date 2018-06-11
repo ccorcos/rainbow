@@ -2,7 +2,7 @@ import { Scene } from "../types"
 import * as config from "../config"
 import * as chroma from "chroma-js"
 
-const particles = 20
+const particles = 200
 const size = 1
 
 interface Particle {

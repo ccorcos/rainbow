@@ -22,7 +22,6 @@ css.global("a", {
 
 css.global("body", {
 	margin: "1em 2em",
-	maxWidth: "50em",
 	fontFamily: '-apple-system, "Helvetica", "Arial", sans-serif',
 	color: "#444",
 	tabSize: 4,

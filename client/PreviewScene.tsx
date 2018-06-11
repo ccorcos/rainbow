@@ -42,7 +42,7 @@ export default class PreviewScene extends React.Component<{
 			<canvas
 				width={config.width}
 				height={config.height}
-				style={{ height: 300 }}
+				style={{ width: "100%" }}
 				ref={this.handleRef}
 			/>
 		)
