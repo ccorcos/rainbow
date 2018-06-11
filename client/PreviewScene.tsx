@@ -23,9 +23,9 @@ export default class PreviewScene extends React.Component<{
 		}
 	}
 
-	componentDidMount() {
+	async componentDidMount() {
 		const scene = scenes[this.props.scene] as Scene<any> // TODO: better types
-		this.sceneState = scene.init()
+		this.sceneState = await scene.init()
 		this.ctx = this.canvas.getContext("2d") as CanvasRenderingContext2D
 		this.stop = loop(() => {
 			scene.render(this.ctx, this.sceneState)
@@ -34,7 +34,9 @@ export default class PreviewScene extends React.Component<{
 	}
 
 	componentWillUnmount() {
-		this.stop()
+		if (this.stop()) {
+			this.stop()
+		}
 	}
 
 	render() {

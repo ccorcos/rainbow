@@ -36,21 +36,26 @@ const waitMs = 1000 / config.frameRate
 
 export default function loop<T>(scene: Scene<T>, debug = false) {
 	let stop = false
-	let state = scene.init()
 
-	const innerLoop = async () => {
-		while (!stop) {
-			if (debug) {
-				await wait()
+	const start = async () => {
+		let state = await scene.init()
+
+		const innerLoop = async () => {
+			while (!stop) {
+				if (debug) {
+					await wait()
+				}
+				scene.render(ctx, state)
+				await delay(waitMs)
+				await pixelite.render(ctx)
+				state = scene.update(state)
 			}
-			scene.render(ctx, state)
-			await delay(waitMs)
-			await pixelite.render(ctx)
-			state = scene.update(state)
 		}
-	}
 
-	innerLoop()
+		innerLoop()
+	}
+	start()
+
 	return () => {
 		stop = true
 	}

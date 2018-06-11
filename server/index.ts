@@ -18,6 +18,8 @@ const app = express()
 // parse application/json
 app.use(bodyParser.json())
 
+app.use(express.static("assets"))
+
 // Set up an api handler
 function handler<T extends keyof Api>(
 	name: T,

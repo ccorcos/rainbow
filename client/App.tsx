@@ -26,7 +26,9 @@ export default class App extends React.Component<{}, { scene: SceneName }> {
 					<PreviewScene key={this.state.scene} scene={this.state.scene} />
 				</div>
 				{sceneNames.map(sceneName => (
-					<button onClick={() => this.setScene(sceneName)}>{sceneName}</button>
+					<button key={sceneName} onClick={() => this.setScene(sceneName)}>
+						{sceneName}
+					</button>
 				))}
 			</div>
 		)

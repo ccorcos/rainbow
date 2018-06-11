@@ -37,7 +37,6 @@ brew install cairo
 		28 boards per side with 450 pixels per board. 28 * 450 = 12600
 		One pixelite has 16 outputs with 550 pixels per output. 16*550 = 8800
 		12600 * 2 / 8800 = 2.86. We can do this with 3 pixelites. 4 would be easier...
-
 		- [x] fullsize rainbow 18 boards. start at output 1.
 			- [] 14 boards for one pixelite. 4 pixelites.
 	- [] try running on a raspberry pi
