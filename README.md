@@ -14,7 +14,7 @@ git clone git@github.com:ccorcos/rainbow.git
 cd rainbow
 npm install
 brew install cairo
-./node_modules/.bin/ts-node test.ts
+./node_modules/.bin/ts-node runScene.ts --scene=walkScene
 ```
 
 ## Not Working
@@ -26,7 +26,7 @@ brew install cairo
 ## To Do
 
 - [x] Efficiently draw visualization, for example, using https://github.com/Automattic/node-canvas
-- [ ] Client / Server abstractions
+- [x] Client / Server abstractions
 - [ ] Preview on the client, render on the server
 - [ ] Draw visualizations on in the browser while also rendering on the client
 - [ ] Efficiently generate packets using matrix operations, for example, using https://github.com/tensorflow/tfjs
