@@ -27,7 +27,12 @@ brew install cairo
 
 - [x] Efficiently draw visualization, for example, using https://github.com/Automattic/node-canvas
 - [x] Client / Server abstractions
-- [ ] Preview on the client, render on the server
-- [ ] Draw visualizations on in the browser while also rendering on the client
+- [x] Preview on the client, render on the server
+	- [] fix the borderScene
+	- [] bounceScene
+	- [] other ideas...
+- [] stress test
+	- [] full size test
+	- []
 - [ ] Efficiently generate packets using matrix operations, for example, using https://github.com/tensorflow/tfjs
 

@@ -7,11 +7,12 @@
 import * as React from "react"
 import PreviewScene from "./PreviewScene"
 import { SceneName, sceneNames } from "../scenes/allScenes"
+import * as config from "../config"
 
 import * as api from "./api"
 
 export default class App extends React.Component<{}, { scene: SceneName }> {
-	state = { scene: "hueSweepScene" as SceneName }
+	state = { scene: config.startScene }
 
 	setScene = (scene: SceneName) => {
 		this.setState({ scene })

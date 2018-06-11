@@ -11,6 +11,7 @@ import * as path from "path"
 import { Api, Scene } from "../types"
 import loop from "./loop"
 import scenes from "../scenes/allScenes"
+import * as config from "../config"
 
 const app = express()
 
@@ -29,7 +30,7 @@ function handler<T extends keyof Api>(
 }
 
 // Keep track of the current running render loop.
-let stopCurrentLoop: () => void | undefined
+let stopCurrentLoop = loop(scenes[config.startScene] as Scene<any>) // TODO: better types
 
 handler("setScene", async ({ scene }) => {
 	if (stopCurrentLoop) {
