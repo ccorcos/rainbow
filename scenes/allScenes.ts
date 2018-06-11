@@ -5,6 +5,7 @@ import walkScene from "./walkScene"
 import zoomScene from "./zoomScene"
 import bounceScene from "./bounceScene"
 import particleScene from "./particleScene"
+import rainbowScene from "./rainbowScene"
 
 const scenes = {
 	bounceScene,
@@ -14,6 +15,7 @@ const scenes = {
 	hueSweepScene,
 	borderScene,
 	walkScene,
+	rainbowScene,
 }
 
 export type SceneName = keyof typeof scenes
